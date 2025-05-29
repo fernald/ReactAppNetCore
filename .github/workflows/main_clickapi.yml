@@ -9,6 +9,12 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  AZURE_WEBAPP_NAME: clickapi   # set this to your application's name
+  DOTNET_ROOT: '.'      # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '9.x'             # set this to the dot net version to use
+  AZUREAPPSERVICE_PUBLISHPROFILE_7807D9E7169E4A3FA57072D42C32205D: ''
+
 jobs:
   build:
     runs-on: windows-latest
