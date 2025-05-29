@@ -1,0 +1,44 @@
+name: Trigger auto deployment for clickui
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/clickui-AutoDeployTrigger-30212f8d-962b-45f6-9e4e-f90d1470b7e4.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:
+      
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.CLICKUI_AZURE_CREDENTIALS }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          registryUrl: GitHub.com
+          registryUsername: ${{ secrets.CLICKUI_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.CLICKUI_REGISTRY_PASSWORD }}
+          containerAppName: clickui
+          resourceGroup: TestRG
+          imageToBuild: GitHub.com/clickui:${{ github.sha }}
+          
+            
+
+     
+
